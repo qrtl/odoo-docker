@@ -12,7 +12,6 @@
 # Description:          Odoo is a complete ERP and CRM software.
 ### END INIT INFO
 
-#PATH=/bin:/sbin:/usr/bin
 DAEMON=/opt/odoo/9.0/openerp-server
 NAME=openerp-server
 DESC=openerp-server
@@ -26,7 +25,7 @@ CONFIGFILE="/opt/odoo/etc/openerp-server.conf"
 # pidfile
 PIDFILE=/var/run/$NAME.pid
 
-# Additional options that are passed to the Daemon.
+# Additional options that are passed to the daemon.
 DAEMON_OPTS="-c $CONFIGFILE"
 
 [ -x $DAEMON ] || exit 0
