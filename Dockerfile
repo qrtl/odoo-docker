@@ -54,8 +54,8 @@ RUN set -x; \
 # Install Japanese fonts for PDF printing
 RUN apt-get install fonts-vlgothic
 
-# Add odoo user
-RUN adduser --system --home=/opt/odoo --group --shell=/bin/bash odoo
+# Add odoo user (apply the same in the host machine for compatibility)
+RUN addgroup --gid=300 odoo && adduser --system --uid=300 --gid=300 --home /opt/odoo --shell /bin/bash odoo
 
 # Add boot script
 COPY ./odooboot /
@@ -63,7 +63,7 @@ RUN chmod +x /odooboot
 
 USER odoo
 
-# `Create directories
+# Create directories
 RUN bin/bash -c "mkdir /opt/odoo/{custom,data,etc,log}"
 COPY ./openerp-server.conf /opt/odoo/etc/
 
