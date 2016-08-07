@@ -12,7 +12,7 @@
 # Description:          Odoo is a complete ERP and CRM software.
 ### END INIT INFO
 
-DAEMON=/opt/odoo/9.0/openerp-server
+DAEMON=/opt/odoo/8.0/openerp-server
 NAME=openerp-server
 DESC=openerp-server
 

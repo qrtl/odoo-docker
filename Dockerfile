@@ -10,8 +10,8 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B97B0AFCAA1A47F044F
 RUN set -x; \
   apt-get install -yq --no-install-recommends \
     python-pip \
-    python-imaging \
-    python-pychart \
+    node-less \
+    node-clean-css \
     # Libraries needed to install the pip modules (libpq-dev for pg_config > psycopg2)
     libpq-dev \
     python-dev \
@@ -34,12 +34,6 @@ ADD requirements.txt /opt/requirements.txt
 RUN pip install --upgrade pip \
   && pip install -r /opt/requirements.txt
 
-# Install LESS
-RUN set -x; \
-  apt-get install -y --no-install-recommends \
-    node-less \
-    node-clean-css
-
 # Install wkhtmltopdf 0.12.1
 ADD http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb /opt/sources/wkhtmltox.deb
 RUN set -x; \
@@ -50,9 +44,6 @@ RUN set -x; \
     libxrender1 \
   && dpkg -i /opt/sources/wkhtmltox.deb \
   && rm -rf /opt/sources/wkhtmltox.deb
-
-# Install Japanese fonts for PDF printing
-RUN apt-get install fonts-vlgothic
 
 # Add odoo user (apply the same in the host machine for compatibility)
 RUN addgroup --gid=300 odoo && adduser --system --uid=300 --gid=300 --home /opt/odoo --shell /bin/bash odoo
@@ -70,8 +61,8 @@ COPY ./openerp-server.conf /opt/odoo/etc/
 # Get Odoo code
 WORKDIR /opt/odoo
 RUN set -x; \
-  git clone --depth 1 https://github.com/oca/ocb.git -b 9.0 9.0 \
-  && rm -rf 9.0/.git
+  git clone --depth 1 https://github.com/oca/ocb.git -b 8.0 8.0 \
+  && rm -rf 8.0/.git
 
 USER 0
 
@@ -80,7 +71,7 @@ USER 0
 RUN apt-get install -y supervisor
 COPY ./supervisord.conf /etc/supervisor/conf.d/
 
-VOLUME ["/opt/odoo/custom", "/opt/odoo/data", "/opt/odoo/etc", "/opt/odoo/log"]
+VOLUME ["/opt/odoo/custom", "/opt/odoo/data", "/opt/odoo/etc", "/opt/odoo/log", "/usr/share/fonts"]
 
 EXPOSE 8069 8072
 
