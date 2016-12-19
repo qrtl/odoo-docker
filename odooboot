@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh +x
 
 ### BEGIN INIT INFO
 # Provides:             openerp-server
@@ -12,15 +12,15 @@
 # Description:          Odoo is a complete ERP and CRM software.
 ### END INIT INFO
 
-DAEMON=/opt/odoo/9.0/openerp-server
-NAME=openerp-server
-DESC=openerp-server
+DAEMON=/odoo/odoo/odoo-bin
+NAME=odoo-bin
+DESC=odoo-bin
 
-# Specify the user name (Default: openerp).
+# Specify the user name (Default: odoo).
 USER=odoo
 
 # Specify config file.
-CONFIGFILE="/opt/odoo/etc/openerp-server.conf"
+CONFIGFILE="/odoo/etc/odoo.conf"
 
 # pidfile
 PIDFILE=/var/run/$NAME.pid
