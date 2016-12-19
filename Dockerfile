@@ -11,21 +11,21 @@ RUN set -x; \
   apt-get install -yq --no-install-recommends \
     python-pip \
     # Libraries needed to install the pip modules (libpq-dev for pg_config > psycopg2)
-    libpq-dev \
     python-dev \
-    libffi-dev \
+    libpq-dev \
+#    libffi-dev \
     libxml2-dev \
     libxslt1-dev \
     libldap2-dev \
     libsasl2-dev \
-    libssl-dev \
+#    libssl-dev \
     libjpeg-dev \
     python-setuptools \
     build-essential \
     # For database management
-    postgresql-client-9.5 \
+    postgresql-client-9.6 \
     # For getting Odoo code
-    git   
+    git
 
 # Install Odoo Python dependencies.
 ADD requirements.txt /opt/requirements.txt
@@ -50,7 +50,7 @@ RUN set -x; \
   && rm -rf /opt/sources/wkhtmltox.deb
 
 # Add odoo user (apply the same in the host machine for compatibility)
-RUN addgroup --gid=300 odoo && adduser --system --uid=300 --gid=300 --home /opt/odoo --shell /bin/bash odoo
+RUN addgroup --gid=300 odoo && adduser --system --uid=300 --gid=300 --home /odoo --shell /bin/bash odoo
 
 # Add boot script
 COPY ./odooboot /
@@ -59,14 +59,14 @@ RUN chmod +x /odooboot
 USER odoo
 
 # Create directories
-RUN bin/bash -c "mkdir /opt/odoo/{custom,data,etc,log}"
-COPY ./openerp-server.conf /opt/odoo/etc/
+RUN bin/bash -c "mkdir /odoo/{custom,data,etc,log}"
+COPY ./odoo.conf /odoo/etc/
 
 # Get Odoo code
-WORKDIR /opt/odoo
+WORKDIR /odoo
 RUN set -x; \
-  git clone --depth 1 https://github.com/oca/ocb.git -b 9.0 9.0 \
-  && rm -rf 9.0/.git
+  git clone --depth 1 https://github.com/odoo/odoo.git -b 10.0 \
+  && rm -rf odoo/.git
 
 USER 0
 
@@ -75,7 +75,7 @@ USER 0
 RUN apt-get install -y supervisor
 COPY ./supervisord.conf /etc/supervisor/conf.d/
 
-VOLUME ["/opt/odoo/custom", "/opt/odoo/data", "/opt/odoo/etc", "/opt/odoo/log", "/usr/share/fonts"]
+VOLUME ["/odoo/custom", "/odoo/data", "/odoo/etc", "/odoo/log", "/usr/share/fonts"]
 
 EXPOSE 8069 8072
 
