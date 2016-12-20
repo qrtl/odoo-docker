@@ -18,7 +18,7 @@ RUN set -x; \
     libxslt1-dev \
     libldap2-dev \
     libsasl2-dev \
-#    libssl-dev \
+    libssl-dev \
     libjpeg-dev \
     python-setuptools \
     build-essential \
