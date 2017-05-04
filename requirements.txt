@@ -39,3 +39,6 @@ Werkzeug==0.11.11
 wsgiref==0.1.2
 XlsxWriter==0.9.3
 xlwt==1.1.2
+
+# for https://github.com/OCA/server-tools/tree/10.0/auth_signup_verify_email
+validate_email==1.3
