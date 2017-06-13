@@ -1,5 +1,5 @@
 FROM ubuntu:16.04
-MAINTAINER Rooms For (Hong Kong) Limited T/A OSCG <contactus@roomsfor.hk>
+MAINTAINER Quartile Limited <info@quartile.co>
 
 # Update source repository
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8 \
@@ -27,7 +27,7 @@ RUN set -x; \
     # For database management
     postgresql-client-9.5 \
     # For getting Odoo code
-    git   
+    git
 
 # Install Odoo Python dependencies.
 ADD requirements.txt /opt/requirements.txt
@@ -35,7 +35,7 @@ RUN pip install --upgrade pip \
   && pip install -r /opt/requirements.txt
 
 # Install wkhtmltopdf 0.12.1
-ADD http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb /opt/sources/wkhtmltox.deb
+ADD https://downloads.wkhtmltopdf.org/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb /opt/sources/wkhtmltox.deb
 RUN set -x; \
   apt-get install -y --no-install-recommends \
     fontconfig \
