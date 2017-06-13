@@ -25,7 +25,7 @@ RUN set -x; \
     # For database management
     postgresql-client-9.5 \
     # For getting Odoo code
-    git   
+    git
 
 # Install Odoo Python dependencies.
 ADD requirements.txt /opt/requirements.txt
@@ -39,7 +39,7 @@ RUN set -x; \
     node-clean-css
 
 # Install wkhtmltopdf 0.12.1
-ADD http://download.gna.org/wkhtmltopdf/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb /opt/sources/wkhtmltox.deb
+ADD https://downloads.wkhtmltopdf.org/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb /opt/sources/wkhtmltox.deb
 RUN set -x; \
   apt-get install -y --no-install-recommends \
     fontconfig \
