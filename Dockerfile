@@ -13,6 +13,7 @@ RUN set -x; \
     # Libraries needed to install the pip modules (libpq-dev for pg_config > psycopg2)
     python-dev \
     libpq-dev \
+    # to install portable C which is a distant dependency for pysftp 
     libffi-dev \
     libxml2-dev \
     libxslt1-dev \
