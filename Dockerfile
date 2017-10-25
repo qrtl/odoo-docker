@@ -13,7 +13,6 @@ RUN set -x; \
     python3-pip \
     # Libraries needed to install the pip modules (libpq-dev for pg_config > psycopg2)
     python3-dev \
-#    libpq-dev \
     # to install portable C which is a distant dependency for pysftp 
     libffi-dev \
     libxml2-dev \
@@ -21,11 +20,13 @@ RUN set -x; \
     libldap2-dev \
     libsasl2-dev \
     libssl-dev \
-#    libjpeg-dev \
     python3-setuptools \
     build-essential \
     # For database management
     postgresql-client-9.6 \
+    # GeoIP related
+    geoip-database-contrib \
+    libgeoip-dev \
     # For getting Odoo code
     git
 
@@ -37,29 +38,19 @@ RUN pip3 install --upgrade pip \
 # Install LESS
 RUN set -x; \
   apt-get install -y --no-install-recommends \
-#    node-less \
-#    node-clean-css
     node-less
 
-## Install wkhtmltopdf 0.12.1
-#ADD https://downloads.wkhtmltopdf.org/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb /opt/sources/wkhtmltox.deb
-#RUN set -x; \
-#  apt-get install -y --no-install-recommends \
-#    fontconfig \
-#    libx11-6 \
-#    libxext6 \
-#    libxrender1 \
-#  && dpkg -i /opt/sources/wkhtmltox.deb \
-#  && rm -rf /opt/sources/wkhtmltox.deb
-
-# Install wkhtmltox 0.12.4
+# Install wkhtmltox 0.12.1
+ADD https://downloads.wkhtmltopdf.org/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb /opt/sources/wkhtmltox.deb
 RUN set -x; \
-  curl -o wkhtmltox.tar.xz -SL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
-  && echo '3f923f425d345940089e44c1466f6408b9619562 wkhtmltox.tar.xz' | sha1sum -c - \
-  && tar xvf wkhtmltox.tar.xz \
-  && cp wkhtmltox/lib/* /usr/local/lib/ \
-  && cp wkhtmltox/bin/* /usr/local/bin/ \
-  && cp -r wkhtmltox/share/man/man1 /usr/local/share/man/
+  apt-get install -y --no-install-recommends \
+    fontconfig \
+    libx11-6 \
+    libxext6 \
+    libxrender1 \
+    libjpeg-dev \
+  && dpkg -i /opt/sources/wkhtmltox.deb \
+  && rm -rf /opt/sources/wkhtmltox.deb
 
 # Add odoo user (apply the same in the host machine for compatibility)
 RUN addgroup --gid=300 odoo && adduser --system --uid=300 --gid=300 --home /odoo --shell /bin/bash odoo
