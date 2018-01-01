@@ -50,7 +50,7 @@ RUN set -x; \
   && rm -rf /opt/sources/wkhtmltox.deb
 
 # Add odoo user (apply the same in the host machine for compatibility)
-RUN addgroup --gid=300 odoo && adduser --system --uid=300 --gid=300 --home /opt/odoo --shell /bin/bash odoo
+RUN addgroup --gid=300 odoo && adduser --system --uid=300 --gid=300 --home /odoo --shell /bin/bash odoo
 
 # Add boot script
 COPY ./odooboot /
