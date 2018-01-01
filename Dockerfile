@@ -23,7 +23,7 @@ RUN set -x; \
     python-setuptools \
     build-essential \
     # For database management
-    postgresql-client-9.5 \
+    postgresql-client-9.6 \
     # For getting Odoo code
     git
 
@@ -59,14 +59,14 @@ RUN chmod +x /odooboot
 USER odoo
 
 # Create directories
-RUN bin/bash -c "mkdir /opt/odoo/{custom,data,etc,log}"
-COPY ./openerp-server.conf /opt/odoo/etc/
+RUN bin/bash -c "mkdir /odoo/{custom,data,etc,log}"
+COPY ./openerp-server.conf /odoo/etc/
 
 # Get Odoo code
-WORKDIR /opt/odoo
+WORKDIR /odoo
 RUN set -x; \
-  git clone --depth 1 https://github.com/oca/ocb.git -b 9.0 9.0 \
-  && rm -rf 9.0/.git
+  git clone --depth 1 https://github.com/oca/ocb.git -b 9.0 \
+  && rm -rf odoo/.git
 
 USER 0
 
@@ -75,7 +75,7 @@ USER 0
 RUN apt-get install -y supervisor
 COPY ./supervisord.conf /etc/supervisor/conf.d/
 
-VOLUME ["/opt/odoo/custom", "/opt/odoo/data", "/opt/odoo/etc", "/opt/odoo/log", "/usr/share/fonts"]
+VOLUME ["/odoo/custom", "/odoo/data", "/odoo/etc", "/odoo/log", "/usr/share/fonts"]
 
 EXPOSE 8069 8072
 
