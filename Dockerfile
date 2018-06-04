@@ -32,7 +32,7 @@ RUN set -x; \
 
 # Install Odoo Python dependencies.
 ADD requirements.txt /opt/requirements.txt
-RUN pip3 install --upgrade pip \
+RUN python3 -m pip install --upgrade pip \
   && pip3 install -r /opt/requirements.txt
 
 # Install LESS
