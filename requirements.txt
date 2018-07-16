@@ -43,6 +43,3 @@ validate_email==1.3
 
 # for https://github.com/OCA/server-tools/tree/11.0/auto_backup
 pysftp==0.2.8
-
-# for Odoo RPC
-odoorpc
