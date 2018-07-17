@@ -6,6 +6,9 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B97B0AFCAA1A47F044F
     && echo "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
     && apt-get update
 
+# Set Environment Variable
+ENV LC_ALL=C.UTF-8
+
 # Install dependencies and tools
 RUN set -x; \
   apt-get install -yq --no-install-recommends \
