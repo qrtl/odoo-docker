@@ -1,5 +1,7 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 MAINTAINER Quartile Limited <info@quartile.co>
+
+RUN apt-get update && apt-get install -y gnupg
 
 # Update source repository
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8 \
@@ -43,11 +45,13 @@ RUN set -x; \
   apt-get install -y --no-install-recommends \
     node-less
 
-# Install wkhtmltox 0.12.1
-ADD https://downloads.wkhtmltopdf.org/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb /opt/sources/wkhtmltox.deb
+# Install wkhtmltox 0.12.1.3
+ADD https://builds.wkhtmltopdf.org/0.12.1.3/wkhtmltox_0.12.1.3-1~bionic_amd64.deb /opt/sources/wkhtmltox.deb
 RUN set -x; \
   apt-get install -y --no-install-recommends \
     fontconfig \
+    xfonts-base \
+    xfonts-75dpi \
     libx11-6 \
     libxext6 \
     libxrender1 \
