@@ -54,6 +54,7 @@ RUN set -x; \
     libxext6 \
     libxrender1 \
     libjpeg-dev \
+    libpng12-0 \
   && dpkg -i /opt/sources/wkhtmltox.deb \
   && rm -rf /opt/sources/wkhtmltox.deb
 
