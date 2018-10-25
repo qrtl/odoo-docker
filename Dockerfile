@@ -50,6 +50,8 @@ ADD https://builds.wkhtmltopdf.org/0.12.1.3/wkhtmltox_0.12.1.3-1~bionic_amd64.de
 RUN set -x; \
   apt-get install -y --no-install-recommends \
     fontconfig \
+    xfonts-base \
+    xfonts-75dpi \
     libx11-6 \
     libxext6 \
     libxrender1 \
