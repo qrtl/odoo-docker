@@ -49,14 +49,15 @@ RUN set -x; \
 ADD https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb /opt/sources/wkhtmltox.deb
 RUN set -x; \
   apt-get install -y --no-install-recommends \
-    fontconfig \
-    xfonts-base \
-    xfonts-75dpi \
-    libx11-6 \
-    libxext6 \
     libxrender1 \
-    libjpeg-dev \
-    libjpeg62-turbo \
+    libfontconfig1\
+    libx11-dev \
+    libjpeg62 \
+    libxtst6 \
+    fontconfig \
+    xfonts-75dpi \
+    xfonts-base \
+    libpng12-0 \
   && dpkg -i /opt/sources/wkhtmltox.deb \
   && rm -rf /opt/sources/wkhtmltox.deb
 
