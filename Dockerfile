@@ -56,7 +56,7 @@ RUN set -x; \
     libxext6 \
     libxrender1 \
     libjpeg-dev \
-  && dpkg -i /opt/sources/wkhtmltox.deb \
+  && dpkg --force-depends -i /opt/sources/wkhtmltox.deb \
   && rm -rf /opt/sources/wkhtmltox.deb
 
 # Add odoo user (apply the same in the host machine for compatibility)
