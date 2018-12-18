@@ -46,6 +46,8 @@ RUN set -x; \
     node-less
 
 # Install wkhtmltox 0.12.1.3
+RUN apt-add-repository -y "deb http://security.ubuntu.com/ubuntu xenial-security main" \
+    && apt-get update
 ADD https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb /opt/sources/wkhtmltox.deb
 RUN set -x; \
   apt-get install -y --no-install-recommends \
