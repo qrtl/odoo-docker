@@ -46,7 +46,7 @@ RUN set -x; \
     node-less
 
 # Install wkhtmltox 0.12.1.3
-ADD https://builds.wkhtmltopdf.org/0.12.1.3/wkhtmltox_0.12.1.3-1~bionic_amd64.deb /opt/sources/wkhtmltox.deb
+ADD https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb /opt/sources/wkhtmltox.deb
 RUN set -x; \
   apt-get install -y --no-install-recommends \
     fontconfig \
