@@ -61,6 +61,7 @@ RUN set -x; \
     xfonts-75dpi \
     xfonts-base \
     libpng12-0 \
+    libjpeg-turbo8 \
   && dpkg -i /opt/sources/wkhtmltox.deb \
   && rm -rf /opt/sources/wkhtmltox.deb
 
