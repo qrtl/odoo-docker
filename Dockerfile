@@ -45,7 +45,7 @@ RUN set -x; \
   apt-get install -y --no-install-recommends \
     node-less
 
-# Install wkhtmltox 0.12.1.3
+# Install wkhtmltox 0.12.5
 RUN apt-get install -y software-properties-common \
     && apt-add-repository -y "deb http://security.ubuntu.com/ubuntu xenial-security main" \
     && apt-get update
