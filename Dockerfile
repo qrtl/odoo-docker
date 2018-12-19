@@ -49,13 +49,13 @@ RUN set -x; \
 RUN apt-get install -y software-properties-common \
     && apt-add-repository -y "deb http://security.ubuntu.com/ubuntu xenial-security main" \
     && apt-get update
-ADD https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb /opt/sources/wkhtmltox.deb
+ADD https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.xenial_amd64.deb /opt/sources/wkhtmltox.deb
 RUN set -x; \
   apt-get install -y --no-install-recommends \
     libxrender1 \
-    libfontconfig1\
+    libfontconfig1 \
     libx11-dev \
-    libjpeg62-dev \
+    libjpeg62 \
     libxtst6 \
     fontconfig \
     xfonts-75dpi \
