@@ -55,7 +55,7 @@ RUN set -x; \
     libxrender1 \
     libfontconfig1\
     libx11-dev \
-    libjpeg62 \
+    libjpeg62-dev \
     libxtst6 \
     fontconfig \
     xfonts-75dpi \
