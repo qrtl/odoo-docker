@@ -28,7 +28,7 @@ RUN set -x; \
     # For database management
     postgresql-client-9.6 \
     # GeoIP related
-    geoip-database-contrib \
+    # geoip-database-contrib \
     libgeoip-dev \
     # For getting Odoo code
     git
