@@ -28,7 +28,7 @@ RUN set -x; \
     python3-setuptools \
     build-essential \
     # For database management
-    postgresql-client-9.6 \
+    postgresql-client-10 \
     # GeoIP related
     # geoip-database-contrib \
     libgeoip-dev \
