@@ -81,7 +81,7 @@ COPY ./odoo.conf /odoo/etc/
 # Get Odoo code
 WORKDIR /odoo
 RUN set -x; \
-  git clone --depth 1 https://github.com/odoo/odoo.git -b 12.0 \
+  git clone --depth 1 https://github.com/odoo/odoo.git -b 13.0 \
   && rm -rf odoo/.git
 
 USER 0
