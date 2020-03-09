@@ -57,26 +57,21 @@ RUN addgroup --gid=300 odoo && adduser --system --uid=300 --gid=300 --home /odoo
 COPY ./odooboot /
 RUN chmod +x /odooboot
 
-USER odoo
-
-# Create directories
-RUN bin/bash -c "mkdir /odoo/{custom,data,etc,log}"
-COPY ./odoo.conf /odoo/etc/
-
 # Get Odoo code
-WORKDIR /odoo
+WORKDIR /opt
 RUN set -x; \
   git clone --depth 1 https://github.com/odoo/odoo.git -b 10.0 \
   && rm -rf odoo/.git
 
-USER 0
+# Change directory owner
+RUN chown -R odoo: /odoo /opt/odoo
 
 # Install Supervisord.
 # For some reason the boot script does not work (container exits...) when it is directly set to entrypoint.
 RUN apt-get install -y supervisor
 COPY ./supervisord.conf /etc/supervisor/conf.d/
 
-VOLUME ["/odoo/custom", "/odoo/data", "/odoo/etc", "/odoo/log", "/usr/share/fonts"]
+VOLUME ["/odoo", "/usr/share/fonts"]
 
 EXPOSE 8069 8072
 
