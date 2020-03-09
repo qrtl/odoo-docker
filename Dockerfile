@@ -68,6 +68,9 @@ RUN set -x; \
   git clone --depth 1 https://github.com/odoo/odoo.git -b 11.0 \
   && rm -rf odoo/.git
 
+# Change directory owner
+RUN chown -R odoo: /odoo /opt/odoo
+
 # Install Supervisord.
 # For some reason the boot script does not work (container exits...) when it is directly set to entrypoint.
 RUN apt-get install -y supervisor
