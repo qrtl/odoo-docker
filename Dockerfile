@@ -39,8 +39,8 @@ RUN set -x; \
     node-less \
     node-clean-css
 
-# Install wkhtmltopdf 0.12.1
-ADD https://downloads.wkhtmltopdf.org/0.12/0.12.1/wkhtmltox-0.12.1_linux-trusty-amd64.deb /opt/sources/wkhtmltox.deb
+# Install wkhtmltopdf 0.12.5
+ADD https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.trusty_amd64.deb /opt/sources/wkhtmltox.deb
 RUN set -x; \
   apt-get install -y --no-install-recommends \
     fontconfig \
@@ -60,7 +60,7 @@ RUN chmod +x /odooboot
 # Get Odoo code
 WORKDIR /opt
 RUN set -x; \
-  git clone --depth 1 https://github.com/odoo/odoo.git -b 10.0 \
+  git clone --depth 1 https://github.com/oca/ocb.git -b 10.0 \
   && rm -rf odoo/.git
 
 # Change directory owner
