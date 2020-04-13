@@ -46,6 +46,8 @@ RUN set -x; \
     fontconfig \
     libx11-6 \
     libxext6 \
+    xfonts-75dpi \
+    xfonts-base \ 
     libxrender1 \
   && dpkg -i /opt/sources/wkhtmltox.deb \
   && rm -rf /opt/sources/wkhtmltox.deb
@@ -61,17 +63,17 @@ RUN chmod +x /odooboot
 WORKDIR /opt
 RUN set -x; \
   git clone --depth 1 https://github.com/oca/ocb.git -b 10.0 \
-  && rm -rf odoo/.git
+  && rm -rf ocb/.git
 
 # Change directory owner
-RUN chown -R odoo: /odoo /opt/odoo
+RUN chown -R odoo: ocb /opt/ocb
 
 # Install Supervisord.
 # For some reason the boot script does not work (container exits...) when it is directly set to entrypoint.
 RUN apt-get install -y supervisor
 COPY ./supervisord.conf /etc/supervisor/conf.d/
 
-VOLUME ["/odoo", "/usr/share/fonts"]
+VOLUME ["/ocb", "/usr/share/fonts"]
 
 EXPOSE 8069 8072
 
