@@ -62,7 +62,7 @@ RUN chmod +x /odooboot
 # Get Odoo code
 WORKDIR /opt
 RUN set -x; \
-  git clone --depth 1 https://github.com/oca/ocb.git -b 10.0 \
+  git clone --depth 1 https://github.com/oca/ocb.git -b 10.0 ocb \
   && rm -rf ocb/.git
 
 # Change directory owner
