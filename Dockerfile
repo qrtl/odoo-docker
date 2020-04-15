@@ -62,18 +62,18 @@ RUN chmod +x /odooboot
 # Get Odoo code
 WORKDIR /opt
 RUN set -x; \
-  git clone --depth 1 https://github.com/oca/ocb.git -b 10.0 ocb \
-  && rm -rf ocb/.git
+  git clone --depth 1 https://github.com/oca/ocb.git -b 10.0 odoo \
+  && rm -rf odoo/.git
 
 # Change directory owner
-RUN chown -R odoo: ocb /opt/ocb
+RUN chown -R odoo: /odoo /opt/odoo
 
 # Install Supervisord.
 # For some reason the boot script does not work (container exits...) when it is directly set to entrypoint.
 RUN apt-get install -y supervisor
 COPY ./supervisord.conf /etc/supervisor/conf.d/
 
-VOLUME ["/ocb", "/usr/share/fonts"]
+VOLUME ["/odoo", "/usr/share/fonts"]
 
 EXPOSE 8069 8072
 
