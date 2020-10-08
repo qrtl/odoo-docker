@@ -4,7 +4,7 @@ MAINTAINER Quartile Limited <info@quartile.co>
 EXPOSE 8069 8071 8072
 
 ARG WKHTMLTOPDF_VERSION=0.12.5
-ARG WKHTMLTOPDF_CHECKSUM=7e35a63f9db14f93ec7feeb0fce76b30c08f2057
+ARG WKHTMLTOPDF_CHECKSUM=1140b0ab02aa6e17346af2f14ed0de807376de475ba90e1db3975f112fbd20bb
 ARG ODOO_SOURCE=odoo/odoo
 ARG ODOO_VERSION=14.0
 ENV ODOO_VERSION="$ODOO_VERSION"
@@ -13,31 +13,32 @@ ENV ODOO_VERSION="$ODOO_VERSION"
 ENV LANG C.UTF-8
 
 # Install some deps, lessc and less-plugin-clean-css, and wkhtmltopdf
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        # ca-certificates \
+RUN apt-get -qq update \
+    && apt-get install -yqq --no-install-recommends \
         curl \
-        # dirmngr \
-        # fonts-noto-cjk \
+        dirmngr \
         git \
-        # gnupg \
-        # libssl-dev \
+        gnupg2 \
+        libfreetype6-dev \
+        libfribidi-dev \
+        libghc-zlib-dev \
+        libharfbuzz-dev \
+        libjpeg-dev \
+        liblcms2-dev \
+        libldap2-dev \
+        libopenjp2-7-dev \
+        libpq-dev \
+        libsasl2-dev \
+        libtiff5-dev \
+        libwebp-dev \
+        libxml2-dev \
+        libxslt-dev \
         node-less \
         npm \
-        python3-num2words \
-        python3-pdfminer \
-        python3-pip \
-        python3-phonenumbers \
-        python3-pyldap \
-        python3-qrcode \
-        python3-renderpm \
-        python3-setuptools \
-        python3-slugify \
-        python3-vobject \
-        python3-watchdog \
-        python3-xlrd \
-        python3-xlwt \
-        xz-utils \
+        tcl-dev \
+        tk-dev \
+        zlibc \
+        zlib1g-dev \
     && curl -SLo wkhtmltox.deb https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox_${WKHTMLTOPDF_VERSION}-1.stretch_amd64.deb \
     && echo "${WKHTMLTOPDF_CHECKSUM}  wkhtmltox.deb" | sha256sum -c - \
     && apt-get install -y --no-install-recommends ./wkhtmltox.deb \
@@ -55,20 +56,17 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ buster-pgdg main' > /etc/
     && apt-get update  \
     && apt-get install --no-install-recommends -y postgresql-client \
     && rm -f /etc/apt/sources.list.d/pgdg.list \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get autopurge -yqq \
+    && sync
 
-
-# Install Odoo Python dependencies.
 ADD requirements.txt /opt/requirements.txt
-RUN pip install -r https://raw.githubusercontent.com/$ODOO_SOURCE/$ODOO_VERSION/requirements.txt
-RUN pip install -r /opt/requirements.txt
+RUN pip install \
+    -r https://raw.githubusercontent.com/$ODOO_SOURCE/$ODOO_VERSION/requirements.txt \
+    -r /opt/requirements.txt
 
 # Add odoo user (apply the same in the host machine for compatibility)
 RUN addgroup --gid=300 odoo && adduser --system --uid=300 --gid=300 --home /odoo --shell /bin/bash odoo
-
-# Add boot script
-COPY ./odooboot /
-RUN chmod +x /odooboot
 
 # Get Odoo code
 WORKDIR /opt
