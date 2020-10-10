@@ -91,4 +91,6 @@ VOLUME ["/odoo", "/usr/share/fonts"]
 
 EXPOSE 8069 8071 8072
 
+USER odoo
+
 ENTRYPOINT ["/entrypoint.sh"]
