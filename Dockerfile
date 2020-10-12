@@ -19,7 +19,7 @@ ARG ODOO_VERSION=14.0
 # Generate locale C.UTF-8 for postgres and general locale data
 ENV LANG C.UTF-8
 
-COPY --from=odoo-code odoo /opt
+COPY --from=odoo-code odoo /opt/odoo
 
 # Install some deps, lessc and less-plugin-clean-css, and wkhtmltopdf
 RUN set -x; \
@@ -54,7 +54,7 @@ RUN set -x; \
     && echo "${WKHTMLTOPDF_CHECKSUM}  wkhtmltox.deb" | sha256sum -c - \
     && apt-get install -y --no-install-recommends ./wkhtmltox.deb \
     && rm -rf /var/lib/apt/lists/* wkhtmltox.deb \
-    && apt-get purge -yqq $dependencies \
+    # && apt-get purge -yqq $dependencies \
     && apt-get autopurge -yqq
 
 # install latest postgresql-client
@@ -73,7 +73,7 @@ RUN set -x; \
     && apt-get install --no-install-recommends -y postgresql-client \
     && rm -f /etc/apt/sources.list.d/pgdg.list \
     && rm -rf /var/lib/apt/lists/* \
-    && apt-get purge -yqq gnupg2 \
+    # && apt-get purge -yqq gnupg2 \
     && apt-get autopurge -yqq \
     && sync
 
@@ -94,4 +94,4 @@ EXPOSE 8069 8071 8072
 USER odoo
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["odoo"]
+# CMD ["odoo"]
