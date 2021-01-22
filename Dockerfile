@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM python:3.8-slim-buster
 LABEL maintainer="Quartile Limited <info@quartile.co>"
 
 ARG ODOO_SOURCE=odoo/odoo
@@ -18,26 +18,18 @@ RUN set -x; \
         build-essential \
         dirmngr \
         fonts-noto-cjk \
-        gnupg \
         git \
-        libssl-dev \
-        node-less \
+        libpq-dev \
+        libjpeg-dev \
+        liblcms2-dev \
+        libldap2-dev \
+        libopenjp2-7-dev \
+        libpq-dev \
+        libsasl2-dev \
+        libxml2-dev \
+        libxslt-dev \
         npm \
-        python3-dev \
-        python3-num2words \
-        python3-pdfminer \
-        python3-pip \
-        python3-phonenumbers \
-        python3-pyldap \
-        python3-qrcode \
-        python3-renderpm \
-        python3-setuptools \
-        python3-slugify \
-        python3-vobject \
-        python3-watchdog \
-        python3-xlrd \
-        python3-xlwt \
-        xz-utils \
+        zlib1g-dev \
     " \ 
     && apt-get -qq update \
     && apt-get install -yqq --no-install-recommends $dependencies
@@ -68,9 +60,6 @@ RUN set -x; \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get autopurge -yqq \
     && sync
-
-# Clean up apt cache
-RUN rm -rf /var/lib/apt/lists/* && apt autoremove -yqq
 
 # Add odoo user (apply the same in the host machine for compatibility)
 RUN addgroup --gid=300 odoo && adduser --system --uid=300 --gid=300 --home /odoo --shell /bin/bash odoo
