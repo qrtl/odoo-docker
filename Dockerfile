@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 LABEL maintainer="Quartile Limited <info@quartile.co>"
 
-ARG PYTHON_VERSION=3.8
+ARG PYTHON_VERSION=3.6
 ARG ODOO_SOURCE=odoo/odoo
 ARG ODOO_VERSION=14.0
 ARG WKHTMLTOPDF_VERSION=0.12.5
