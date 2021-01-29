@@ -1,5 +1,5 @@
 FROM ubuntu:16.04
-MAINTAINER Rooms For (Hong Kong) Limited T/A OSCG <contactus@roomsfor.hk>
+MAINTAINER Quartile Limited <info@quartile.co>
 
 # Update source repository
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8 \
@@ -30,7 +30,7 @@ RUN set -x; \
 
 # Install Odoo Python dependencies.
 ADD requirements.txt /opt/requirements.txt
-RUN python -m pip install --upgrade pip \
+RUN python -m pip install --upgrade "pip < 21.0" \
   && pip install -r /opt/requirements.txt
 
 # Install LESS
