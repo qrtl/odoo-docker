@@ -64,16 +64,12 @@ RUN set -x; \
 # Add odoo user (apply the same in the host machine for compatibility)
 RUN addgroup --gid=300 odoo && adduser --system --uid=300 --gid=300 --home /odoo --shell /bin/bash odoo
 
-# Get Odoo code
-WORKDIR /opt
-RUN git clone --depth 1 https://github.com/$ODOO_SOURCE.git odoo -b $ODOO_VERSION
-
 # Copy entrypoint script and Odoo configuration file
 COPY ./entrypoint.sh /
 COPY wait-for-psql.py /usr/local/bin/wait-for-psql.py
 
 # Change directory owner
-RUN chown -R odoo: /odoo /opt/odoo /usr/local/bin/wait-for-psql.py
+RUN chown -R odoo: /odoo /usr/local/bin/wait-for-psql.py
 
 # Set the default config file
 ENV ODOO_RC /odoo/etc/odoo.conf
