@@ -28,6 +28,6 @@ check_config "db_user" "$USER"
 check_config "db_password" "$PASSWORD"
 
 /usr/local/bin/wait-for-psql.py ${DB_ARGS[@]} --timeout=30
-python3 /opt/odoo/odoo-bin -c $ODOO_RC "$@"
+python3 /odoo/code/odoo/odoo-bin -c $ODOO_RC "$@"
 
 exit 1
