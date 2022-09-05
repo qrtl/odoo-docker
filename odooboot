@@ -12,7 +12,7 @@
 # Description:          Odoo is a complete ERP and CRM software.
 ### END INIT INFO
 
-DAEMON=/opt/odoo/odoo-bin
+DAEMON=/odoo/code/odoo/odoo-bin
 NAME=odoo-bin
 DESC=odoo-bin
 
