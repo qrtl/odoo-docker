@@ -1,83 +1,93 @@
-FROM python:3.8-slim-bullseye
-LABEL maintainer="Quartile Limited <info@quartile.co>"
+FROM ubuntu:20.04
+MAINTAINER Quartile Limited <info@quartile.co>
 
-ARG ODOO_SOURCE=OCA/OCB
-ARG ODOO_VERSION=12.0
-ARG WKHTMLTOPDF_VERSION=0.12.5
-ARG WKHTMLTOPDF_CHECKSUM=dfab5506104447eef2530d1adb9840ee3a67f30caaad5e9bcb8743ef2f9421bd
+RUN apt-get update && apt-get install -y gnupg
 
-# Generate locale C.UTF-8 for postgres and general locale data
-ENV LANG C.UTF-8
+# Update source repository
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8 \
+    && echo "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+    && apt-get update
 
+# Set Environment Variable
+ENV LC_ALL=C.UTF-8
+
+# Install dependencies and tools
 RUN set -x; \
-    apt-get -qq update \
-    && apt-get install -yqq --no-install-recommends \
-        curl \
-        git
+  apt-get install -yq --no-install-recommends \
+    curl \
+    python3-pip \
+    # Libraries needed to install the pip modules (libpq-dev for pg_config > psycopg2)
+    python3-dev \
+    # to install portable C which is a distant dependency for pysftp 
+    libffi-dev \
+    libxml2-dev \
+    libxslt1-dev \
+    libldap2-dev \
+    libsasl2-dev \
+    libssl-dev \
+    python3-setuptools \
+    build-essential \
+    # For database management
+    postgresql-client-10 \
+    # GeoIP related
+    # geoip-database-contrib \
+    libgeoip-dev \
+    # For getting Odoo code
+    git
 
-RUN set -x; \
-    # libjpeg8-dev is not available in Debian, therefore libjpeg-dev
-    dependencies=" \
-        build-essential \
-        python3-dev \
-        libxml2-dev \
-        libxslt1-dev \
-        libldap2-dev \
-        libsasl2-dev \
-        libtiff5-dev \
-        libjpeg-dev \
-        libopenjp2-7-dev \
-        zlib1g-dev \
-        libfreetype6-dev \
-        liblcms2-dev \
-        libwebp-dev \
-        libharfbuzz-dev \
-        libfribidi-dev \
-        libxcb1-dev \
-        libpq-dev \
-    " \ 
-    && apt-get -qq update \
-    && apt-get install -yqq --no-install-recommends $dependencies
-
+# Install Odoo Python dependencies.
+ADD requirements.txt /opt/requirements.txt
 RUN python3 -m pip install --upgrade pip \
-    && pip install -r https://raw.githubusercontent.com/$ODOO_SOURCE/$ODOO_VERSION/requirements.txt \
-    && curl -SLo wkhtmltox.deb https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox_${WKHTMLTOPDF_VERSION}-1.buster_amd64.deb \
-    # Two spaces between '-c' and '-' below: https://unix.stackexchange.com/a/139892
-    && echo "${WKHTMLTOPDF_CHECKSUM}  wkhtmltox.deb" | sha256sum -c  - \
-    && apt-get install -y --no-install-recommends ./wkhtmltox.deb \
-    && rm -rf /var/lib/apt/lists/* wkhtmltox.deb \
-    && apt-get autopurge -yqq
+  && pip3 install -r /opt/requirements.txt
 
-# Install the latest postgresql-client
+# Install LESS
 RUN set -x; \
-    apt-get -qq update \
-    && apt-get install -yqq --no-install-recommends gnupg2 \
-    && echo 'deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main' >> /etc/apt/sources.list.d/postgresql.list \
-    && curl -SL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-    && apt-get update \
-    && apt-get install --no-install-recommends -y postgresql-client \
-    && rm -f /etc/apt/sources.list.d/postgresql.list \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get autopurge -yqq \
-    && sync
+  apt-get install -y --no-install-recommends \
+    node-less
+
+# Install wkhtmltox 0.12.5
+RUN apt-get install -y software-properties-common \
+    && apt-add-repository -y "deb http://security.ubuntu.com/ubuntu xenial-security main" \
+    && apt-get update
+ADD https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.xenial_amd64.deb /opt/sources/wkhtmltox.deb
+RUN set -x; \
+  apt-get install -y --no-install-recommends \
+    libxrender1 \
+    libfontconfig1 \
+    libx11-dev \
+    libjpeg62 \
+    libxtst6 \
+    fontconfig \
+    xfonts-75dpi \
+    xfonts-base \
+    libpng12-0 \
+    libjpeg-turbo8 \
+  && dpkg -i /opt/sources/wkhtmltox.deb \
+  && rm -rf /opt/sources/wkhtmltox.deb
 
 # Add odoo user (apply the same in the host machine for compatibility)
 RUN addgroup --gid=300 odoo && adduser --system --uid=300 --gid=300 --home /odoo --shell /bin/bash odoo
 
-# Copy entrypoint script and Odoo configuration file
-COPY ./entrypoint.sh /
-COPY wait-for-psql.py /usr/local/bin/wait-for-psql.py
+# Add boot script
+COPY ./odooboot /
+RUN chmod +x /odooboot
+
+# Get Odoo code
+WORKDIR /opt
+RUN set -x; \
+  git clone --depth 1 https://github.com/odoo/odoo.git -b 12.0 \
+  && rm -rf odoo/.git
 
 # Change directory owner
-RUN chown -R odoo: /odoo /usr/local/bin/wait-for-psql.py
+RUN chown -R odoo: /odoo /code/odoo
 
-# Set the default config file
-ENV ODOO_RC /odoo/etc/odoo.conf
+# Install Supervisord.
+# For some reason the boot script does not work (container exits...) when it is directly set to entrypoint.
+RUN apt-get install -y supervisor
+COPY ./supervisord.conf /etc/supervisor/conf.d/
 
 VOLUME ["/odoo", "/usr/share/fonts"]
 
 EXPOSE 8069 8072
 
-USER odoo
-
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/supervisord"]
