@@ -1,11 +1,11 @@
 FROM python:3.8-slim-buster
 LABEL maintainer="Quartile Limited <info@quartile.co>"
 
-ARG ODOO_SOURCE=odoo/odoo
+ARG ODOO_SOURCE=OCA/OCB
 ARG ODOO_VERSION=14.0
 ARG WKHTMLTOPDF_VERSION=0.12.5
 ARG WKHTMLTOPDF_CHECKSUM=1140b0ab02aa6e17346af2f14ed0de807376de475ba90e1db3975f112fbd20bb
-ARG ODOO_SOURCE=odoo/odoo
+ARG ODOO_SOURCE=OCA/OCB
 ARG ODOO_VERSION=14.0
 
 # Generate locale C.UTF-8 for postgres and general locale data
@@ -64,16 +64,12 @@ RUN set -x; \
 # Add odoo user (apply the same in the host machine for compatibility)
 RUN addgroup --gid=300 odoo && adduser --system --uid=300 --gid=300 --home /odoo --shell /bin/bash odoo
 
-# Get Odoo code
-WORKDIR /opt
-RUN git clone --depth 1 https://github.com/$ODOO_SOURCE.git -b $ODOO_VERSION
-
 # Copy entrypoint script and Odoo configuration file
 COPY ./entrypoint.sh /
 COPY wait-for-psql.py /usr/local/bin/wait-for-psql.py
 
 # Change directory owner
-RUN chown -R odoo: /odoo /opt/odoo /usr/local/bin/wait-for-psql.py
+RUN chown -R odoo: /odoo /usr/local/bin/wait-for-psql.py
 
 # Set the default config file
 ENV ODOO_RC /odoo/etc/odoo.conf
