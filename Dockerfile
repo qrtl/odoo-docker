@@ -74,7 +74,7 @@ RUN chown -R odoo: /odoo /usr/local/bin/wait-for-psql.py
 # Set the default config file
 ENV ODOO_RC /odoo/etc/odoo.conf
 
-VOLUME ["/odoo", "/usr/share/fonts"]
+VOLUME ["/odoo", "/usr/share/fonts", "/mnt"]
 
 EXPOSE 8069 8072
 
