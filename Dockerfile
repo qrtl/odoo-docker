@@ -1,5 +1,8 @@
 FROM ubuntu:18.04
-MAINTAINER Quartile Limited <info@quartile.co>
+LABEL MAINTAINER Quartile Limited <info@quartile.co>
+
+ARG ODOO_SOURCE=OCA/OCB
+ARG ODOO_VERSION=13.0
 
 RUN apt-get update && apt-get install -y gnupg
 
@@ -38,7 +41,7 @@ RUN set -x; \
 # Install Odoo Python dependencies.
 ADD requirements.txt /opt/requirements.txt
 RUN python3 -m pip install --upgrade pip \
-  && pip3 install -r /opt/requirements.txt
+    && pip3 install -r https://raw.githubusercontent.com/$ODOO_SOURCE/$ODOO_VERSION/requirements.txt
 
 # Install LESS
 RUN set -x; \
@@ -72,14 +75,8 @@ RUN addgroup --gid=300 odoo && adduser --system --uid=300 --gid=300 --home /odoo
 COPY ./odooboot /
 RUN chmod +x /odooboot
 
-# Get Odoo code
-WORKDIR /opt
-RUN set -x; \
-  git clone --depth 1 https://github.com/odoo/odoo.git -b 13.0 \
-  && rm -rf odoo/.git
-
 # Change directory owner
-RUN chown -R odoo: /odoo /opt/odoo
+RUN chown -R odoo: /odoo
 
 # Install Supervisord.
 # For some reason the boot script does not work (container exits...) when it is directly set to entrypoint.
