@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y gnupg
 
 # Update source repository
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8 \
-    && echo "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+    && echo "deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
     && apt-get update
 
 # Set Environment Variable
@@ -27,8 +27,6 @@ RUN set -x; \
     libssl-dev \
     python3-setuptools \
     build-essential \
-    # For database management
-    postgresql-client-9.6 \
     # GeoIP related
     # geoip-database-contrib \
     libgeoip-dev \
