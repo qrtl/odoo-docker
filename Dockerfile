@@ -37,7 +37,6 @@ RUN set -x; \
     git
 
 # Install Odoo Python dependencies.
-ADD requirements.txt /opt/requirements.txt
 RUN python3 -m pip install --upgrade pip \
     && pip3 install -r https://raw.githubusercontent.com/$ODOO_SOURCE/$ODOO_VERSION/requirements.txt
 
