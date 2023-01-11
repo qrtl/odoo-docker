@@ -1,5 +1,5 @@
 FROM ubuntu:18.04
-LABEL MAINTAINER Quartile Limited <info@quartile.co>
+LABEL maintainer="Quartile Limited <info@quartile.co>"
 
 ARG ODOO_SOURCE=OCA/OCB
 ARG ODOO_VERSION=13.0
