@@ -1,10 +1,10 @@
-FROM python:3.8-slim-bullseye
+FROM python:3.10-slim-bookworm
 LABEL maintainer="Quartile Limited <info@quartile.co>"
 
 ARG ODOO_SOURCE=OCA/OCB
-ARG ODOO_VERSION=16.0
-ARG WKHTMLTOPDF_VERSION=0.12.5
-ARG WKHTMLTOPDF_CHECKSUM=dfab5506104447eef2530d1adb9840ee3a67f30caaad5e9bcb8743ef2f9421bd
+ARG ODOO_VERSION=17.0
+ARG WKHTMLTOPDF_VERSION=0.13.0
+ARG WKHTMLTOPDF_CHECKSUM='8feeb4d814263688d6e6fe28e03b541be5ca94f39c6e1ef8ff4c88dd8fb9443a'
 
 # Generate locale C.UTF-8 for postgres and general locale data
 ENV LANG C.UTF-8
@@ -41,7 +41,7 @@ RUN set -x; \
 
 RUN python3 -m pip install --upgrade pip \
     && pip install -r https://raw.githubusercontent.com/$ODOO_SOURCE/$ODOO_VERSION/requirements.txt \
-    && curl -SLo wkhtmltox.deb https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox_${WKHTMLTOPDF_VERSION}-1.buster_amd64.deb \
+    && curl -SLo wkhtmltox.deb https://github.com/odoo/wkhtmltopdf/releases/download/nightly/wkhtmltox_${WKHTMLTOPDF_VERSION}-1.nightly.bookworm_amd64.deb \
     # Two spaces between '-c' and '-' below: https://unix.stackexchange.com/a/139892
     && echo "${WKHTMLTOPDF_CHECKSUM}  wkhtmltox.deb" | sha256sum -c  - \
     && apt-get install -y --no-install-recommends ./wkhtmltox.deb \
@@ -52,7 +52,7 @@ RUN python3 -m pip install --upgrade pip \
 RUN set -x; \
     apt-get -qq update \
     && apt-get install -yqq --no-install-recommends gnupg2 \
-    && echo 'deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main' >> /etc/apt/sources.list.d/postgresql.list \
+    && echo 'deb http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main' >> /etc/apt/sources.list.d/postgresql.list \
     && curl -SL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && apt-get update \
     && apt-get install --no-install-recommends -y postgresql-client \

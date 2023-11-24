@@ -1,4 +1,4 @@
-# Dockerfile for Odoo 16.0
+# Dockerfile for Odoo 17.0
 
 ## Credits
 
