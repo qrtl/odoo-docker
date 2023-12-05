@@ -41,6 +41,7 @@ RUN set -x; \
 
 RUN python3 -m pip install --upgrade pip \
     && pip install -r https://raw.githubusercontent.com/$ODOO_SOURCE/$ODOO_VERSION/requirements.txt \
+    && pip install click-odoo-contrib \
     && curl -SLo wkhtmltox.deb https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox_${WKHTMLTOPDF_VERSION}-1.buster_amd64.deb \
     # Two spaces between '-c' and '-' below: https://unix.stackexchange.com/a/139892
     && echo "${WKHTMLTOPDF_CHECKSUM}  wkhtmltox.deb" | sha256sum -c  - \
