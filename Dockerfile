@@ -3,8 +3,8 @@ LABEL maintainer="Quartile Limited <info@quartile.co>"
 
 ARG ODOO_SOURCE=OCA/OCB
 ARG ODOO_VERSION=17.0
-ARG WKHTMLTOPDF_VERSION=0.13.0
-ARG WKHTMLTOPDF_CHECKSUM='8feeb4d814263688d6e6fe28e03b541be5ca94f39c6e1ef8ff4c88dd8fb9443a'
+ARG WKHTMLTOPDF_VERSION=0.12.6.1
+ARG WKHTMLTOPDF_CHECKSUM='98ba0d157b50d36f23bd0dedf4c0aa28c7b0c50fcdcdc54aa5b6bbba81a3941d'
 
 # Generate locale C.UTF-8 for postgres and general locale data
 ENV LANG C.UTF-8
@@ -41,7 +41,7 @@ RUN set -x; \
 
 RUN python3 -m pip install --upgrade pip \
     && pip install -r https://raw.githubusercontent.com/$ODOO_SOURCE/$ODOO_VERSION/requirements.txt \
-    && curl -SLo wkhtmltox.deb https://github.com/odoo/wkhtmltopdf/releases/download/nightly/wkhtmltox_${WKHTMLTOPDF_VERSION}-1.nightly.bookworm_amd64.deb \
+    && curl -SLo wkhtmltox.deb https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}-3/wkhtmltox_${WKHTMLTOPDF_VERSION}-3.bookworm_amd64.deb \
     # Two spaces between '-c' and '-' below: https://unix.stackexchange.com/a/139892
     && echo "${WKHTMLTOPDF_CHECKSUM}  wkhtmltox.deb" | sha256sum -c  - \
     && apt-get install -y --no-install-recommends ./wkhtmltox.deb \
