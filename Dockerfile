@@ -12,15 +12,11 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     gnupg \
     && rm -rf /var/lib/apt/lists/*
-  
-# Add the PostgreSQL GPG key
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8
 
 # Add the PostgreSQL archive repository
-RUN echo "deb https://apt-archive.postgresql.org/pub/repos/apt/ bionic-pgdg main" > /etc/apt/sources.list.d/pgdg.list
-
-# Update package list
-RUN apt-get update
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8 \
+    && echo "deb https://apt-archive.postgresql.org/pub/repos/apt/ bionic-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+    && apt-get update
 
 # Set Environment Variable
 ENV LC_ALL=C.UTF-8
