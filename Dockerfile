@@ -4,11 +4,18 @@ LABEL MAINTAINER Quartile Limited <info@quartile.co>
 ARG ODOO_SOURCE=OCA/OCB
 ARG ODOO_VERSION=12.0
 
-RUN apt-get update && apt-get install -y gnupg
+# Update and install all necessary packages
+# - `ca-certificates`: Required to securely access archived repositories over HTTPS,
+# ensuring SSL/TLS certificate verification and preventing access errors.
+RUN apt-get update && apt-get install -y \
+    wget \
+    ca-certificates \
+    gnupg \
+    && rm -rf /var/lib/apt/lists/*
 
-# Update source repository
+# Add the PostgreSQL archive repository
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8 \
-    && echo "deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+    && echo "deb https://apt-archive.postgresql.org/pub/repos/apt/ bionic-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
     && apt-get update
 
 # Set Environment Variable
