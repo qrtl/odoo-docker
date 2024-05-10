@@ -5,8 +5,9 @@ ARG ODOO_SOURCE=OCA/OCB
 ARG ODOO_VERSION=10.0
 
 # Update and install all necessary packages
+# - `ca-certificates`: Required to securely access archived repositories over HTTPS,
+# ensuring SSL/TLS certificate verification and preventing access errors.
 RUN apt-get update && apt-get install -y \
-    wget \
     ca-certificates \
     gnupg \
     && rm -rf /var/lib/apt/lists/*
