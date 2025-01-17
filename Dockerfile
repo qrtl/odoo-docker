@@ -40,7 +40,10 @@ RUN set -x; \
     && apt-get install -yqq --no-install-recommends $dependencies
 
 RUN python3 -m pip install --upgrade pip \
-    && pip install -r https://raw.githubusercontent.com/$ODOO_SOURCE/$ODOO_VERSION/requirements.txt \
+    && curl -o requirements.txt https://raw.githubusercontent.com/$ODOO_SOURCE/$ODOO_VERSION/requirements.txt \
+    # disable gevent version recommendation from odoo and use 22.10.2 used in debian bookworm as python3-gevent
+    && sed -i -E "s/(gevent==)21\.8\.0( ; sys_platform != 'win32' and python_version == '3.10')/\122.10.2\2/;s/(greenlet==)1.1.2( ; sys_platform != 'win32' and python_version == '3.10')/\12.0.2\2/" requirements.txt \
+    && pip install -r requirements.txt \
     && curl -SLo wkhtmltox.deb https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}-3/wkhtmltox_${WKHTMLTOPDF_VERSION}-3.bookworm_amd64.deb \
     # Two spaces between '-c' and '-' below: https://unix.stackexchange.com/a/139892
     && echo "${WKHTMLTOPDF_CHECKSUM}  wkhtmltox.deb" | sha256sum -c  - \
