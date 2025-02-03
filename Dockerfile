@@ -1,8 +1,8 @@
 FROM python:3.10-slim-bookworm
-LABEL maintainer="Quartile Limited <info@quartile.co>"
+LABEL maintainer="Quartile <info@quartile.co>"
 
 ARG ODOO_SOURCE=OCA/OCB
-ARG ODOO_VERSION=17.0
+ARG ODOO_VERSION=18.0
 ARG WKHTMLTOPDF_VERSION=0.12.6.1
 ARG WKHTMLTOPDF_CHECKSUM='98ba0d157b50d36f23bd0dedf4c0aa28c7b0c50fcdcdc54aa5b6bbba81a3941d'
 
