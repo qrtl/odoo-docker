@@ -36,7 +36,7 @@ jobs:
 
       - name: Smoke test
         run: |
-          docker run --rm odoo-test:${{ matrix.version }} python3 --version
+          docker run --rm --entrypoint python3 odoo-test:${{ matrix.version }} --version
           docker run --rm --entrypoint cloc odoo-test:${{ matrix.version }} --version
           docker run --rm --entrypoint psql odoo-test:${{ matrix.version }} --version
           docker run --rm --entrypoint wkhtmltopdf odoo-test:${{ matrix.version }} --version
