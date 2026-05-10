@@ -43,6 +43,8 @@ RUN set -x; \
 COPY 19_requirements.txt /tmp/extra_requirements.txt
 
 RUN python3 -m pip install --upgrade pip \
+    # Python 3.12 no longer bundles setuptools; Odoo imports pkg_resources at startup
+    && pip install --upgrade "setuptools<82" \
     && curl -o requirements.txt https://raw.githubusercontent.com/$ODOO_SOURCE/$ODOO_VERSION/requirements.txt \
     && pip install -r requirements.txt \
     && pip install -r /tmp/extra_requirements.txt \
