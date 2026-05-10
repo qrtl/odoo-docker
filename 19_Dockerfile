@@ -1,8 +1,8 @@
-FROM python:3.10-slim-bookworm
+FROM python:3.12-slim-bookworm
 LABEL maintainer="Quartile <info@quartile.co>"
 
 ARG ODOO_SOURCE=OCA/OCB
-ARG ODOO_VERSION=16.0
+ARG ODOO_VERSION=19.0
 ARG WKHTMLTOPDF_VERSION=0.12.6.1
 ARG WKHTMLTOPDF_CHECKSUM='98ba0d157b50d36f23bd0dedf4c0aa28c7b0c50fcdcdc54aa5b6bbba81a3941d'
 
@@ -36,16 +36,14 @@ RUN set -x; \
         libfribidi-dev \
         libxcb1-dev \
         libpq-dev \
-    " \ 
+    " \
     && apt-get -qq update \
     && apt-get install -yqq --no-install-recommends $dependencies
 
-COPY 16_requirements.txt /tmp/extra_requirements.txt
+COPY 19_requirements.txt /tmp/extra_requirements.txt
 
 RUN python3 -m pip install --upgrade pip \
     && curl -o requirements.txt https://raw.githubusercontent.com/$ODOO_SOURCE/$ODOO_VERSION/requirements.txt \
-    # disable gevent version recommendation from odoo and use 22.10.2 used in debian bookworm as python3-gevent
-    && sed -i -E "s/gevent==21\.8\.0(.*)/gevent==22.10.2\1/;s/greenlet==1\.1\.2(.*)/greenlet==2.0.2\1/" requirements.txt \
     && pip install -r requirements.txt \
     && pip install -r /tmp/extra_requirements.txt \
     && curl -SLo wkhtmltox.deb https://github.com/wkhtmltopdf/packaging/releases/download/${WKHTMLTOPDF_VERSION}-3/wkhtmltox_${WKHTMLTOPDF_VERSION}-3.bookworm_amd64.deb \
