@@ -1,0 +1,42 @@
+name: Build Test
+
+on:
+  pull_request:
+    paths:
+      - "*_Dockerfile"
+      - "*_requirements.txt"
+      - "entrypoint.sh"
+      - "wait-for-psql.py"
+      - ".github/workflows/build-test.yml"
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      versions: ${{ steps.find.outputs.versions }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: find
+        run: |
+          versions=$(ls *_Dockerfile | sed 's/_Dockerfile//' | jq -R -s -c 'split("\n") | map(select(. != ""))')
+          echo "versions=$versions" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: detect
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ${{ fromJson(needs.detect.outputs.versions) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -f ${{ matrix.version }}_Dockerfile -t odoo-test:${{ matrix.version }} .
+
+      - name: Smoke test
+        run: |
+          docker run --rm --entrypoint python3 odoo-test:${{ matrix.version }} --version
+          docker run --rm --entrypoint cloc odoo-test:${{ matrix.version }} --version
+          docker run --rm --entrypoint psql odoo-test:${{ matrix.version }} --version
+          docker run --rm --entrypoint wkhtmltopdf odoo-test:${{ matrix.version }} --version
