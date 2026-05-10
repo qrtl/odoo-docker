@@ -83,7 +83,7 @@ ENV ODOO_RC /odoo/etc/odoo.conf
 
 VOLUME ["/odoo", "/usr/share/fonts", "/mnt"]
 
-EXPOSE 8069 8072
+EXPOSE 8069 8071 8072
 
 USER odoo
 
