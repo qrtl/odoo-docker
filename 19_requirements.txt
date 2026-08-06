@@ -1,5 +1,10 @@
 git-aggregator
 
+# OCA migration scripts (openupgrade.migrate / rename_fields etc.).
+# Imported by migrations/ in many OCA modules but almost never declared in
+# their manifests, so a module upgrade fails with ImportError without it.
+openupgradelib
+
 # endpoint
 jsonschema
 PyYAML
