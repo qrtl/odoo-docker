@@ -4,3 +4,7 @@ git-aggregator
 # Imported by migrations/ in many OCA modules but almost never declared in
 # their manifests, so a module upgrade fails with ImportError without it.
 openupgradelib
+
+# click-odoo-update: upgrades the modules whose files changed, by checksum
+# rather than manifest version, so deployed code does not run ahead of the DB.
+click-odoo-contrib>=1.23.1,<2
