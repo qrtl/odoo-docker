@@ -5,10 +5,6 @@ git-aggregator
 # their manifests, so a module upgrade fails with ImportError without it.
 openupgradelib
 
-# click-odoo-update: upgrades the modules whose files changed, detected by
-# checksum rather than by manifest version. Our addons rarely bump their
-# version, so nothing else notices that deployed code has moved ahead of a
-# database - the case after a staging deploy or a production-into-copy restore.
-# Same pin as the 19 image (#84); 1.23.1 supports every series from 8.0 up.
-# Rollback is the image digest, not this line.
+# click-odoo-update: upgrades the modules whose files changed, by checksum
+# rather than manifest version, so deployed code does not run ahead of the DB.
 click-odoo-contrib>=1.23.1,<2
