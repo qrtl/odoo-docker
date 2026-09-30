@@ -1,0 +1,18 @@
+git-aggregator
+
+# OCA migration scripts (openupgrade.migrate / rename_fields etc.).
+# Imported by migrations/ in many OCA modules but almost never declared in
+# their manifests, so a module upgrade fails with ImportError without it.
+openupgradelib
+
+# endpoint
+jsonschema
+PyYAML
+
+# click-odoo-update: upgrades the modules whose files changed, detected by
+# checksum rather than by manifest version. Our addons rarely bump their
+# version, so nothing else notices that deployed code has moved ahead of a
+# database - the case after a staging deploy or a production-into-copy restore.
+# The range is carried over from 19 and not yet verified against Odoo 20.
+# Rollback is the image digest, not this line.
+click-odoo-contrib>=1.23.1,<2
