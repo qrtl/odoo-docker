@@ -16,3 +16,8 @@ PyYAML
 # The range is carried over from 19 and not yet verified against Odoo 20.
 # Rollback is the image digest, not this line.
 click-odoo-contrib>=1.23.1,<2
+
+# reportlab 4 no longer bundles its bitmap renderer, and Odoo's requirements
+# install it on Windows only (the Debian package depends on python3-renderpm).
+# Without it every PNG barcode fails with RenderPMError. Version is Odoo's pin.
+rl-renderPM==4.0.3
