@@ -40,3 +40,4 @@ jobs:
           docker run --rm --entrypoint cloc odoo-test:${{ matrix.version }} --version
           docker run --rm --entrypoint psql odoo-test:${{ matrix.version }} --version
           docker run --rm --entrypoint wkhtmltopdf odoo-test:${{ matrix.version }} --version
+          docker run --rm --entrypoint python3 odoo-test:${{ matrix.version }} -c "from reportlab.graphics.barcode import createBarcodeDrawing; createBarcodeDrawing('Code128', value='smoke').asString('png')"
